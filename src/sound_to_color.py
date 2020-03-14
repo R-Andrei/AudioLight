@@ -1,0 +1,174 @@
+from scipy.io import wavfile
+from matplotlib import pyplot
+from os import listdir
+import numpy
+import json
+import re
+
+from converter import Converter
+
+
+class SoundConverter(object):
+    """
+    Docstring
+    """
+
+    def __init__(self, converter_instance):
+
+        self.__converter = converter_instance
+        self.__wavdata = None
+        self.__samples = None
+        self.__samplerate = None
+        self.__duration = None
+        self.__wavdata = None
+        self.__average_frequency = None
+        self.__converted_frequency = None
+        self.__frequencies = None
+        self.__argb = None
+        self.__rgb = None
+        self.__store = {}
+
+    def store(self, file, name=None, force=False):
+        """
+        Docstring
+        """
+        self.read_file(file)
+        refile = re.findall(r'.[a-zA-Z -]+.wav$', file)
+        key = name if name else refile[0][1:-4] if refile else None
+
+        if not force and key in self.__store:
+            raise ValueError(
+                'File already exists in store. Use force=True if you want to replace it.')
+
+        r, g, b = self.__argb
+
+        self.__store[key] = {
+            'wavdata': self.__wavdata,
+            'samples': self.__samples,
+            'samplerate': self.__samplerate,
+            'duration': self.__duration,
+            'average_frequency': self.__average_frequency,
+            'converted_frequency': self.__converted_frequency,
+            'frequencies': self.__frequencies,
+            'argb': {'r': r, 'g': g, 'b': b},
+            'rgb': self.__rgb
+        }
+        print('File \'{}\' added to store.'.format(key))
+
+    def read_file(self, file):
+        """
+        Docstring
+        """
+        if (file[-4:] != '.wav'):
+            raise TypeError(
+                'File format not supported. Please use a .wav file!')
+        try:
+            self.__samplerate, self.__wavdata = wavfile.read(file)
+            self.__wavdata = abs(self.__wavdata[(self.__wavdata[:, 0] != 0)])
+            self.__samples = self.__wavdata.shape[0]
+            self.__duration = int(self.__samples/self.__samplerate)
+            self.__average_frequency = int(numpy.mean(self.__wavdata))
+            self.__converted_frequency = self.__converter.audio_light(self.__average_frequency, use_spectrum='mean_weighted')
+            self.__frequencies = [numpy.mean(self.__wavdata[self.__samplerate*i: self.__samplerate*(i+1)]) for i in range(self.__duration-1)]
+            self.__argb = self.from_audio(self.__average_frequency)
+            self.__rgb = [self.from_audio(frequency, true=True, spectrum='mean') for frequency in self.__frequencies]
+        except Exception as e:
+            print(e)
+            raise e
+
+    def stored_average_frequency(self, file):
+        """
+        Docstring
+        """
+        if file not in self.__store:
+            raise KeyError('File \'{}\' not in store.'.format(file))
+        return self.__store[file]['average_frequency']
+
+    def stored_duration(self, file):
+        """
+        Docstring
+        """
+        if file not in self.__store:
+            raise KeyError('File \'{}\' not in store.'.format(file))
+        return self.__store[file]['duration']
+
+    def average_frequency(self):
+        """
+        Docstring
+        """
+        return self.__average_frequency
+
+    def duration(self):
+        """
+        Docstring
+        """
+        return self.__duration
+
+    def from_light(self, frequency):
+        """
+        Docstring
+        """
+        return self.__converter.to_rgb(frequency)
+
+    def from_audio(self, frequency, true=False, spectrum='mean_weighted'):
+        """
+        Docstring
+        """
+        light = self.__converter.audio_light(frequency, use_spectrum=spectrum, true=true)
+        return self.__converter.to_rgb(light, true=true)
+
+    def import_directory(self, directory_path):
+        """
+        Docstring
+        """
+        for file in [file for file in listdir(directory_path) if file[-4:] == '.wav']:
+            self.store('{}{}'.format(directory_path, file))
+
+    def test_spectrum(self, gamma=0.75):
+        return self.__converter.test_spectrum(gamma=gamma)
+
+    def export_store(self, filename="output.json"):
+        """
+        Docstring
+        """
+        output = {}
+        output['data'] = [{
+            'name': key,
+            'duration': values['duration'],
+            'average_frequency': values['average_frequency'],
+            'converted_frequency': values['converted_frequency'],
+            'argb': values['argb'],
+            'rgb': values['rgb']
+        } for key, values in self.__store.items()]
+        with open(filename, 'w') as exported_file:
+            json.dump(output, exported_file)
+
+
+
+
+c = Converter()
+converter = SoundConverter(c)
+
+converter.import_directory('songs/me/')
+
+converter.export_store('output_me.json')
+
+output = {}
+
+output['data'] = list(converter.test_spectrum(gamma=0.75))
+with open('spectrum.json', 'w') as spectrum_file:
+    json.dump(output, spectrum_file)
+
+
+
+
+
+# samplerate, wavdata = wavfile.read('songs/Grimes IO - Violence.wav')
+# samples = wavdata.shape[0]
+# duration = int(samples/samplerate)
+# final_data = abs(wavdata)
+
+# freqs = [numpy.mean(final_data[samplerate*i: samplerate*(i+1)]) for i in range(duration-1)]
+
+# pyplot.plot(freqs)
+# pyplot.show()

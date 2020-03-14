@@ -1,0 +1,11 @@
+# dependencies
+/node_modules
+/build
+
+npm-debug.log*
+
+**/*.json
+**/__pycache__
+!**/output_me.json
+!**/output_old.json
+!**/output.json
