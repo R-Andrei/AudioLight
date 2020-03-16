@@ -24,8 +24,8 @@ class SoundConverter(object):
         self.__average_frequency = None
         self.__converted_frequency = None
         self.__frequencies = None
-        self.__argb = None
-        self.__rgb = None
+        self.__ahsl = None
+        self.__hsl = None
         self.__store = {}
 
     def store(self, file, name=None, force=False):
@@ -40,8 +40,6 @@ class SoundConverter(object):
             raise ValueError(
                 'File already exists in store. Use force=True if you want to replace it.')
 
-        r, g, b = self.__argb
-
         self.__store[key] = {
             'wavdata': self.__wavdata,
             'samples': self.__samples,
@@ -50,8 +48,8 @@ class SoundConverter(object):
             'average_frequency': self.__average_frequency,
             'converted_frequency': self.__converted_frequency,
             'frequencies': self.__frequencies,
-            'argb': {'r': r, 'g': g, 'b': b},
-            'rgb': self.__rgb
+            'ahsl': self.__ahsl,
+            'hsl': self.__hsl
         }
         print('File \'{}\' added to store.'.format(key))
 
@@ -70,8 +68,8 @@ class SoundConverter(object):
             self.__average_frequency = int(numpy.mean(self.__wavdata))
             self.__converted_frequency = self.__converter.audio_light(self.__average_frequency, use_spectrum='mean_weighted')
             self.__frequencies = [numpy.mean(self.__wavdata[self.__samplerate*i: self.__samplerate*(i+1)]) for i in range(self.__duration-1)]
-            self.__argb = self.from_audio(self.__average_frequency)
-            self.__rgb = [self.from_audio(frequency, true=True, spectrum='mean') for frequency in self.__frequencies]
+            self.__ahsl = self.from_audio(self.__average_frequency)
+            self.__hsl = [self.from_audio(frequency, true=True, spectrum='mean', color_spectrum='mean') for frequency in self.__frequencies]
         except Exception as e:
             print(e)
             raise e
@@ -110,12 +108,14 @@ class SoundConverter(object):
         """
         return self.__converter.to_rgb(frequency)
 
-    def from_audio(self, frequency, true=False, spectrum='mean_weighted'):
+    def from_audio(self, frequency, true=False, spectrum='mean_weighted', color_spectrum = None):
         """
         Docstring
         """
         light = self.__converter.audio_light(frequency, use_spectrum=spectrum, true=true)
-        return self.__converter.to_rgb(light, true=true)
+        r, g, b = self.__converter.to_rgb(light, true=true if not color_spectrum else true if color_spectrum!='mean' else False)
+        h, l, s = self.__converter.to_hls(r, g, b)
+        return {'h': h, 'l': l, 's': s*0.9}
 
     def import_directory(self, directory_path):
         """
@@ -124,8 +124,8 @@ class SoundConverter(object):
         for file in [file for file in listdir(directory_path) if file[-4:] == '.wav']:
             self.store('{}{}'.format(directory_path, file))
 
-    def test_spectrum(self, gamma=0.75):
-        return self.__converter.test_spectrum(gamma=gamma)
+    def test_spectrum(self, gamma=0.75, true=False):
+        return self.__converter.test_spectrum(gamma=gamma, true=true)
 
     def export_store(self, filename="output.json"):
         """
@@ -137,13 +137,11 @@ class SoundConverter(object):
             'duration': values['duration'],
             'average_frequency': values['average_frequency'],
             'converted_frequency': values['converted_frequency'],
-            'argb': values['argb'],
-            'rgb': values['rgb']
+            'ahsl': values['ahsl'],
+            'hsl': values['hsl']
         } for key, values in self.__store.items()]
         with open(filename, 'w') as exported_file:
             json.dump(output, exported_file)
-
-
 
 
 c = Converter()
@@ -155,7 +153,7 @@ converter.export_store('output_me.json')
 
 output = {}
 
-output['data'] = list(converter.test_spectrum(gamma=0.75))
+output['data'] = list(converter.test_spectrum(gamma=0.9, true=False))
 with open('spectrum.json', 'w') as spectrum_file:
     json.dump(output, spectrum_file)
 
