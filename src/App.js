@@ -6,12 +6,11 @@ import { FaLongArrowAltRight, FaLongArrowAltLeft } from 'react-icons/fa';
 import SpectrumList from './SpectrumList';
 
 import Spectrum from './spectrum';
-import Output from './output'
-import OutputOld from './output_old'
+// import Output from './output'
+// import OutputOld from './output_old'
 import OutputMe from './output_me'
 
 function App() {
-  console.log(Output.data)
   return (
     <div className="App">
       <div className="spectrum-wrapper">
