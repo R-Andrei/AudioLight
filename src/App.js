@@ -17,8 +17,7 @@ function App() {
         <div className="frequency-scale"><div><FaLongArrowAltLeft /><p>Lower frequencies</p></div><div><p>Higher frequencies</p><FaLongArrowAltRight /></div></div>
         <div className="spectrum">
           {Spectrum.data.map(color => {
-            console.log('h', color.h, 's', color.s, 'l', color.l);
-            return <div className="spectrum-color" style={{ background: `hsl(${color.h}, ${color.s}%, ${color.l}%)` }} />
+            return <div className="spectrum-color" style={{ background: `hsl(${color.h}, ${color.s}%, ${color.l}%)`}} />
           })}
         </div>
       </div>

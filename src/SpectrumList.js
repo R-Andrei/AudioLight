@@ -5,7 +5,6 @@ const Spectrum = ({data}) => (
     <div className="songs">
         {data.data.map(song => {
           const { name, duration, average_frequency, converted_frequency, ahsl, hsl } = song;
-          console.log(ahsl, ahsl.h, ahsl.s, ahsl.l);
           return <div className="song">
             <div className="song-header"><h3>{name}</h3></div>
 

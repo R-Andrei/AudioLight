@@ -5,7 +5,12 @@
 npm-debug.log*
 
 **/*.json
+!package-lock.json
+!package.json
 **/__pycache__
 !**/output_me.json
 !**/output_old.json
 !**/output.json
+!**/spectrum.json
+
+**/songs/

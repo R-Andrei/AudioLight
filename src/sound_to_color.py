@@ -33,7 +33,7 @@ class SoundConverter(object):
         Docstring
         """
         self.read_file(file)
-        refile = re.findall(r'.[a-zA-Z -]+.wav$', file)
+        refile = re.findall(r'.[\'0-9a-zA-Z\. -]+.wav$', file)
         key = name if name else refile[0][1:-4] if refile else None
 
         if not force and key in self.__store:
@@ -147,7 +147,7 @@ class SoundConverter(object):
 c = Converter()
 converter = SoundConverter(c)
 
-converter.import_directory('songs/me/')
+converter.import_directory('songs/')
 
 converter.export_store('output_me.json')
 
