@@ -1,7 +1,8 @@
 # dependencies
 /node_modules
 /build
-
+**/*.mp3
+**/*.wav
 npm-debug.log*
 **/__pycache__
 **/*.json
