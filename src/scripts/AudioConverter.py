@@ -5,10 +5,8 @@ import numpy
 import json
 import re
 
-from converter import Converter
 
-
-class SoundConverter(object):
+class AudioConverter(object):
     """
     Docstring
     """
@@ -142,31 +140,3 @@ class SoundConverter(object):
         } for key, values in self.__store.items()]
         with open(filename, 'w') as exported_file:
             json.dump(output, exported_file)
-
-
-c = Converter()
-converter = SoundConverter(c)
-
-converter.import_directory('songs/')
-
-converter.export_store('output_me.json')
-
-output = {}
-
-output['data'] = list(converter.test_spectrum(gamma=0.9, true=False))
-with open('spectrum.json', 'w') as spectrum_file:
-    json.dump(output, spectrum_file)
-
-
-
-
-
-# samplerate, wavdata = wavfile.read('songs/Grimes IO - Violence.wav')
-# samples = wavdata.shape[0]
-# duration = int(samples/samplerate)
-# final_data = abs(wavdata)
-
-# freqs = [numpy.mean(final_data[samplerate*i: samplerate*(i+1)]) for i in range(duration-1)]
-
-# pyplot.plot(freqs)
-# pyplot.show()

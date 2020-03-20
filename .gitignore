@@ -3,14 +3,12 @@
 /build
 
 npm-debug.log*
-
+**/__pycache__
 **/*.json
 !package-lock.json
 !package.json
-**/__pycache__
-!**/output_me.json
-!**/output_old.json
-!**/output.json
-!**/spectrum.json
+!output/output.json
+!output/spectrum.json
+!jsconfig.json
 
 **/songs/

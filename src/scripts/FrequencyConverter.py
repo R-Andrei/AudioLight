@@ -1,6 +1,7 @@
 import colorsys
 
-class Converter(object):
+
+class FrequencyConverter(object):
     def __init__(self):
         self.__gamma = 0.75
         self.__Converter = {
@@ -153,5 +154,3 @@ class Converter(object):
         h, l, s = colorsys.rgb_to_hls(r, g, b)
         h, l, s = h*360, l*100, s*100
         return h, l, s
-    
-

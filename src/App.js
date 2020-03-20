@@ -1,14 +1,12 @@
 import React from 'react';
-import './App.css';
+import './styles/App.css';
 
 import { FaLongArrowAltRight, FaLongArrowAltLeft } from 'react-icons/fa';
 
-import SpectrumList from './SpectrumList';
+import SpectrumList from './components/SpectrumList';
 
-import Spectrum from './spectrum';
-// import Output from './output'
-// import OutputOld from './output_old'
-import OutputMe from './output_me'
+import Spectrum from './output/spectrum';
+import Output from './output/output'
 
 function App() {
   return (
@@ -21,10 +19,7 @@ function App() {
           })}
         </div>
       </div>
-      {/* <SpectrumList data={Output} /> */}
-      <SpectrumList data={OutputMe} />
-      {/* <SpectrumList data={OutputOld} /> */}
-      
+      <SpectrumList data={Output} />
     </div>
   );
 }
