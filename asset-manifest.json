@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/AudioLight/static/css/main.22c1dfc1.chunk.css",
+    "main.js": "/AudioLight/static/js/main.277e1c7a.chunk.js",
+    "main.js.map": "/AudioLight/static/js/main.277e1c7a.chunk.js.map",
+    "runtime-main.js": "/AudioLight/static/js/runtime-main.baf77a6c.js",
+    "runtime-main.js.map": "/AudioLight/static/js/runtime-main.baf77a6c.js.map",
+    "static/js/2.cceeabfa.chunk.js": "/AudioLight/static/js/2.cceeabfa.chunk.js",
+    "static/js/2.cceeabfa.chunk.js.map": "/AudioLight/static/js/2.cceeabfa.chunk.js.map",
+    "index.html": "/AudioLight/index.html",
+    "precache-manifest.1239f03781e2e0af1d56370946c58bfc.js": "/AudioLight/precache-manifest.1239f03781e2e0af1d56370946c58bfc.js",
+    "service-worker.js": "/AudioLight/service-worker.js",
+    "static/css/main.22c1dfc1.chunk.css.map": "/AudioLight/static/css/main.22c1dfc1.chunk.css.map",
+    "static/js/2.cceeabfa.chunk.js.LICENSE.txt": "/AudioLight/static/js/2.cceeabfa.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.baf77a6c.js",
+    "static/js/2.cceeabfa.chunk.js",
+    "static/css/main.22c1dfc1.chunk.css",
+    "static/js/main.277e1c7a.chunk.js"
+  ]
+}
