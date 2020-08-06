@@ -20,7 +20,6 @@ def main():
     #     json.dump(output, spectrum_file)
 
     sound = AudioSegment.from_mp3('../media/dl/Vera Blue - Hold.mp3')
-    print(sound)
     sound.export("../media/converted/Vera Blue - Hold.wav", format="wav")
 
 if __name__ == "__main__":

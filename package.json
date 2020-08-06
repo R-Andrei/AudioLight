@@ -1,5 +1,6 @@
 {
   "name": "spectrum",
+  "homepage": "https://r-andrei.github.io/AudioLight/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
